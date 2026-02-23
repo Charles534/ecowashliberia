@@ -1,0 +1,969 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eco-WASH Liberia</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&amp;family=Source+Sans+3:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-forest: #1a5d3a;
+      --color-ocean: #0e7490;
+      --color-earth: #78716c;
+      --color-leaf: #22c55e;
+      --color-sand: #fef3c7;
+    }
+    
+    * { box-sizing: border-box; }
+    
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+    }
+    
+    .font-display {
+      font-family: 'Playfair Display', serif;
+    }
+    
+    .app-wrapper {
+      min-height: 100%;
+      width: 100%;
+      overflow-x: hidden;
+    }
+    
+    .banner-slide {
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      position: absolute;
+      inset: 0;
+    }
+    
+    .banner-slide.active {
+      opacity: 1;
+    }
+    
+    .nav-link {
+      position: relative;
+    }
+    
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--color-leaf);
+      transition: width 0.3s ease;
+    }
+    
+    .nav-link:hover::after,
+    .nav-link.active::after {
+      width: 100%;
+    }
+    
+    .card-hover {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+    
+    .gradient-overlay {
+      background: linear-gradient(135deg, rgba(26,93,58,0.9) 0%, rgba(14,116,144,0.85) 100%);
+    }
+    
+    .image-upload-zone {
+      border: 3px dashed #d1d5db;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .image-upload-zone:hover {
+      border-color: var(--color-forest);
+      background: rgba(26,93,58,0.05);
+    }
+    
+    .image-upload-zone.has-image {
+      border-style: solid;
+      border-color: var(--color-leaf);
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .animate-fade-in {
+      animation: fadeInUp 0.8s ease forwards;
+    }
+    
+    .animate-delay-1 { animation-delay: 0.2s; }
+    .animate-delay-2 { animation-delay: 0.4s; }
+    .animate-delay-3 { animation-delay: 0.6s; }
+    
+    .value-card {
+      background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+    }
+    
+    .objective-item {
+      counter-increment: objective;
+    }
+    
+    .objective-item::before {
+      content: counter(objective);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background: var(--color-forest);
+      color: white;
+      border-radius: 50%;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    
+    .mobile-menu {
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+    
+    .mobile-menu.open {
+      transform: translateX(0);
+    }
+    
+    .banner-dots button {
+      transition: all 0.3s ease;
+    }
+    
+    .banner-dots button.active {
+      width: 32px;
+      background: var(--color-leaf);
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div class="app-wrapper bg-gray-50"><!-- Navigation -->
+   <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="flex items-center justify-between h-16 md:h-20"><!-- Logo -->
+      <div class="flex items-center gap-3">
+       <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-[#1a5d3a] to-[#0e7490] flex items-center justify-center">
+        <svg class="w-6 h-6 md:w-7 md:h-7 text-white" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
+        </svg>
+       </div>
+       <div>
+        <h1 id="nav-title" class="font-display text-lg md:text-xl font-bold text-[#1a5d3a]">Eco-WASH Liberia</h1>
+        <p class="text-xs text-gray-500 hidden sm:block">For a Healthier Liberia</p>
+       </div>
+      </div><!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center gap-8"><button onclick="navigateTo('home')" class="nav-link text-gray-700 font-medium hover:text-[#1a5d3a] active" data-page="home">Home</button> <button onclick="navigateTo('about')" class="nav-link text-gray-700 font-medium hover:text-[#1a5d3a]" data-page="about">About</button> <button onclick="navigateTo('programs')" class="nav-link text-gray-700 font-medium hover:text-[#1a5d3a]" data-page="programs">Programs</button> <button onclick="navigateTo('contact')" class="nav-link text-gray-700 font-medium hover:text-[#1a5d3a]" data-page="contact">Contact</button> <button class="px-5 py-2.5 bg-[#1a5d3a] text-white rounded-full font-semibold hover:bg-[#0e7490] transition-colors"> Donate </button>
+      </div><!-- Mobile Menu Button --> <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg hover:bg-gray-100">
+       <svg id="menu-icon" class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+       </svg>
+       <svg id="close-icon" class="w-6 h-6 text-gray-700 hidden" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+       </svg></button>
+     </div>
+    </div><!-- Mobile Menu -->
+    <div id="mobile-menu" class="mobile-menu fixed inset-0 top-16 bg-white z-40 md:hidden">
+     <div class="p-6 space-y-4"><button onclick="navigateTo('home'); toggleMobileMenu();" class="block w-full text-left py-3 px-4 text-lg font-medium text-gray-700 hover:bg-gray-50 rounded-lg">Home</button> <button onclick="navigateTo('about'); toggleMobileMenu();" class="block w-full text-left py-3 px-4 text-lg font-medium text-gray-700 hover:bg-gray-50 rounded-lg">About</button> <button onclick="navigateTo('programs'); toggleMobileMenu();" class="block w-full text-left py-3 px-4 text-lg font-medium text-gray-700 hover:bg-gray-50 rounded-lg">Programs</button> <button onclick="navigateTo('contact'); toggleMobileMenu();" class="block w-full text-left py-3 px-4 text-lg font-medium text-gray-700 hover:bg-gray-50 rounded-lg">Contact</button> <button class="w-full mt-4 px-5 py-3 bg-[#1a5d3a] text-white rounded-full font-semibold">Donate</button>
+     </div>
+    </div>
+   </nav><!-- Main Content -->
+   <main id="main-content" class="pt-16 md:pt-20"><!-- HOME PAGE -->
+    <section id="page-home" class="page-section"><!-- Hero Banner Slider -->
+     <div class="relative h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden"><!-- Slide 1 -->
+      <div class="banner-slide active" data-slide="0">
+       <div class="absolute inset-0 bg-gradient-to-br from-[#1a5d3a] via-[#166534] to-[#0e7490]"></div>
+       <div class="absolute inset-0 opacity-20">
+        <svg class="w-full h-full" viewbox="0 0 100 100" preserveaspectratio="none"><defs>
+          <pattern id="water-pattern" patternunits="userSpaceOnUse" width="20" height="20">
+           <path d="M0 10 Q5 5 10 10 T20 10" fill="none" stroke="white" stroke-width="0.5" />
+          </pattern>
+         </defs> <rect width="100" height="100" fill="url(#water-pattern)" />
+        </svg>
+       </div>
+       <div class="relative h-full flex items-center justify-center px-4">
+        <div class="text-center text-white max-w-4xl">
+         <h2 class="font-display text-4xl md:text-5xl lg:text-6xl font-bold mb-6 animate-fade-in">Clean Water for Every Community</h2>
+         <p id="hero-tagline" class="text-lg md:text-xl lg:text-2xl opacity-90 mb-8 animate-fade-in animate-delay-1">Empowering Liberia through sustainable WASH services and ecosystem protection</p>
+         <div class="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in animate-delay-2"><button onclick="navigateTo('programs')" class="px-8 py-4 bg-white text-[#1a5d3a] rounded-full font-bold hover:bg-gray-100 transition-colors">Our Programs</button> <button onclick="navigateTo('about')" class="px-8 py-4 border-2 border-white text-white rounded-full font-bold hover:bg-white/10 transition-colors">Learn More</button>
+         </div>
+        </div>
+       </div>
+      </div><!-- Slide 2 -->
+      <div class="banner-slide" data-slide="1">
+       <div class="absolute inset-0 bg-gradient-to-br from-[#0e7490] via-[#0891b2] to-[#1a5d3a]"></div>
+       <div class="absolute inset-0 opacity-10">
+        <svg class="w-full h-full" viewbox="0 0 400 400"><circle cx="50" cy="50" r="100" fill="white" /> <circle cx="350" cy="350" r="150" fill="white" /> <circle cx="300" cy="100" r="80" fill="white" />
+        </svg>
+       </div>
+       <div class="relative h-full flex items-center justify-center px-4">
+        <div class="text-center text-white max-w-4xl">
+         <h2 class="font-display text-4xl md:text-5xl lg:text-6xl font-bold mb-6">Protecting Our Ecosystems</h2>
+         <p class="text-lg md:text-xl lg:text-2xl opacity-90 mb-8">Restoring watersheds, forests, and mangroves for climate resilience</p>
+         <div class="flex flex-col sm:flex-row gap-4 justify-center"><button onclick="navigateTo('programs')" class="px-8 py-4 bg-[#22c55e] text-white rounded-full font-bold hover:bg-[#16a34a] transition-colors">Environmental Programs</button>
+         </div>
+        </div>
+       </div>
+      </div><!-- Slide 3 -->
+      <div class="banner-slide" data-slide="2">
+       <div class="absolute inset-0 bg-gradient-to-br from-[#166534] via-[#1a5d3a] to-[#0f766e]"></div>
+       <div class="absolute inset-0 opacity-15">
+        <svg class="w-full h-full" viewbox="0 0 100 100" preserveaspectratio="none"><path d="M0 80 L20 60 L40 70 L60 50 L80 65 L100 45 L100 100 L0 100 Z" fill="white" />
+        </svg>
+       </div>
+       <div class="relative h-full flex items-center justify-center px-4">
+        <div class="text-center text-white max-w-4xl">
+         <h2 class="font-display text-4xl md:text-5xl lg:text-6xl font-bold mb-6">Community-Led Solutions</h2>
+         <p class="text-lg md:text-xl lg:text-2xl opacity-90 mb-8">Building resilient communities through inclusive governance and empowerment</p>
+         <div class="flex flex-col sm:flex-row gap-4 justify-center"><button onclick="navigateTo('contact')" class="px-8 py-4 bg-white text-[#1a5d3a] rounded-full font-bold hover:bg-gray-100 transition-colors">Partner With Us</button>
+         </div>
+        </div>
+       </div>
+      </div><!-- Banner Navigation Dots -->
+      <div class="banner-dots absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-3"><button onclick="goToSlide(0)" class="w-3 h-3 rounded-full bg-white/50 active" data-dot="0"></button> <button onclick="goToSlide(1)" class="w-3 h-3 rounded-full bg-white/50" data-dot="1"></button> <button onclick="goToSlide(2)" class="w-3 h-3 rounded-full bg-white/50" data-dot="2"></button>
+      </div><!-- Arrow Controls --> <button onclick="prevSlide()" class="absolute left-4 top-1/2 transform -translate-y-1/2 p-3 bg-white/20 rounded-full hover:bg-white/30 transition-colors">
+       <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+       </svg></button> <button onclick="nextSlide()" class="absolute right-4 top-1/2 transform -translate-y-1/2 p-3 bg-white/20 rounded-full hover:bg-white/30 transition-colors">
+       <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+       </svg></button>
+     </div><!-- Mission & Vision Section -->
+     <section class="py-16 md:py-24 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+       <div class="grid md:grid-cols-2 gap-8 lg:gap-16"><!-- Vision -->
+        <div class="card-hover bg-gradient-to-br from-[#1a5d3a] to-[#0e7490] rounded-3xl p-8 md:p-10 text-white">
+         <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mb-6">
+          <svg class="w-8 h-8" fill="currentColor" viewbox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+          </svg>
+         </div>
+         <h3 class="font-display text-2xl md:text-3xl font-bold mb-4">Our Vision</h3>
+         <p class="text-lg opacity-90 leading-relaxed">A healthy, climate-resilient Liberia where all communities have sustainable access to safe water, improved sanitation, clean rivers and coasts, and thriving forests and mangrove ecosystems.</p>
+        </div><!-- Mission -->
+        <div class="card-hover bg-gray-50 rounded-3xl p-8 md:p-10 border border-gray-100">
+         <div class="w-16 h-16 bg-[#1a5d3a] rounded-2xl flex items-center justify-center mb-6">
+          <svg class="w-8 h-8 text-white" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+          </svg>
+         </div>
+         <h3 class="font-display text-2xl md:text-3xl font-bold text-gray-900 mb-4">Our Mission</h3>
+         <p class="text-lg text-gray-600 leading-relaxed">To empower communities in Liberia through sustainable WASH services, ecosystem protection, plastic-pollution reduction, and climate-resilient livelihoods, using inclusive, community-led, and nature-based approaches.</p>
+        </div>
+       </div>
+      </div>
+     </section><!-- Core Values Section -->
+     <section class="py-16 md:py-24 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+       <div class="text-center mb-12 md:mb-16">
+        <h2 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Our Core Values</h2>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">The principles that guide everything we do</p>
+       </div>
+       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div class="value-card card-hover rounded-2xl p-6 md:p-8 border border-gray-100 shadow-sm">
+         <div class="w-12 h-12 bg-[#22c55e]/10 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-[#22c55e]" fill="currentColor" viewbox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
+          </svg>
+         </div>
+         <h4 class="font-display text-xl font-bold text-gray-900 mb-2">Community Ownership</h4>
+         <p class="text-gray-600">Empowering local communities to lead and sustain their own development initiatives.</p>
+        </div>
+        <div class="value-card card-hover rounded-2xl p-6 md:p-8 border border-gray-100 shadow-sm">
+         <div class="w-12 h-12 bg-[#0e7490]/10 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-[#0e7490]" fill="currentColor" viewbox="0 0 24 24"><path d="M12 22c4.97 0 9-4.03 9-9-4.97 0-9 4.03-9 9zM5.6 10.25c0 1.38 1.12 2.5 2.5 2.5.53 0 1.01-.16 1.42-.44l-.02.19c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5l-.02-.19c.4.28.89.44 1.42.44 1.38 0 2.5-1.12 2.5-2.5 0-1-.59-1.85-1.43-2.25.84-.4 1.43-1.25 1.43-2.25 0-1.38-1.12-2.5-2.5-2.5-.53 0-1.01.16-1.42.44l.02-.19C14.5 3.62 13.38 2.5 12 2.5S9.5 3.62 9.5 5l.02.19c-.4-.28-.89-.44-1.42-.44-1.38 0-2.5 1.12-2.5 2.5 0 1 .59 1.85 1.43 2.25-.84.4-1.43 1.25-1.43 2.25zM12 5.5c1.38 0 2.5 1.12 2.5 2.5s-1.12 2.5-2.5 2.5S9.5 9.38 9.5 8s1.12-2.5 2.5-2.5zM3 13c0 4.97 4.03 9 9 9 0-4.97-4.03-9-9-9z" />
+          </svg>
+         </div>
+         <h4 class="font-display text-xl font-bold text-gray-900 mb-2">Environmental Stewardship</h4>
+         <p class="text-gray-600">Protecting and restoring natural ecosystems for future generations.</p>
+        </div>
+        <div class="value-card card-hover rounded-2xl p-6 md:p-8 border border-gray-100 shadow-sm">
+         <div class="w-12 h-12 bg-[#1a5d3a]/10 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-[#1a5d3a]" fill="currentColor" viewbox="0 0 24 24"><path d="M17.66 8L12 2.35 6.34 8C4.78 9.56 4 11.64 4 13.64s.78 4.11 2.34 5.67 3.61 2.35 5.66 2.35 4.1-.79 5.66-2.35S20 15.64 20 13.64 19.22 9.56 17.66 8zM6 14c.01-2 .62-3.27 1.76-4.4L12 5.27l4.24 4.38C17.38 10.77 17.99 12 18 14H6z" />
+          </svg>
+         </div>
+         <h4 class="font-display text-xl font-bold text-gray-900 mb-2">Sustainability</h4>
+         <p class="text-gray-600">Creating long-term impact through sustainable and scalable solutions.</p>
+        </div>
+        <div class="value-card card-hover rounded-2xl p-6 md:p-8 border border-gray-100 shadow-sm">
+         <div class="w-12 h-12 bg-amber-500/10 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-amber-600" fill="currentColor" viewbox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" />
+          </svg>
+         </div>
+         <h4 class="font-display text-xl font-bold text-gray-900 mb-2">Transparency</h4>
+         <p class="text-gray-600">Operating with openness and accountability in all our activities.</p>
+        </div>
+        <div class="value-card card-hover rounded-2xl p-6 md:p-8 border border-gray-100 shadow-sm">
+         <div class="w-12 h-12 bg-pink-500/10 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-pink-600" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
+          </svg>
+         </div>
+         <h4 class="font-display text-xl font-bold text-gray-900 mb-2">Gender Equality</h4>
+         <p class="text-gray-600">Ensuring inclusive participation and equal opportunities for all.</p>
+        </div>
+        <div class="value-card card-hover rounded-2xl p-6 md:p-8 border border-gray-100 shadow-sm">
+         <div class="w-12 h-12 bg-purple-500/10 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-purple-600" fill="currentColor" viewbox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z" />
+          </svg>
+         </div>
+         <h4 class="font-display text-xl font-bold text-gray-900 mb-2">Innovation &amp; Learning</h4>
+         <p class="text-gray-600">Embracing new ideas and continuous improvement in our approach.</p>
+        </div>
+       </div>
+      </div>
+     </section><!-- Impact Stats -->
+     <section class="py-16 md:py-24 bg-gradient-to-br from-[#1a5d3a] to-[#0e7490] text-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+       <div class="text-center mb-12">
+        <h2 class="font-display text-3xl md:text-4xl font-bold mb-4">Our Impact</h2>
+        <p class="text-lg opacity-80">Making a difference across Liberia</p>
+       </div>
+       <div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="text-center">
+         <div class="text-4xl md:text-5xl font-bold mb-2">
+          50+
+         </div>
+         <div class="text-sm md:text-base opacity-80">
+          Communities Served
+         </div>
+        </div>
+        <div class="text-center">
+         <div class="text-4xl md:text-5xl font-bold mb-2">
+          25K+
+         </div>
+         <div class="text-sm md:text-base opacity-80">
+          People Reached
+         </div>
+        </div>
+        <div class="text-center">
+         <div class="text-4xl md:text-5xl font-bold mb-2">
+          100+
+         </div>
+         <div class="text-sm md:text-base opacity-80">
+          Water Points Built
+         </div>
+        </div>
+        <div class="text-center">
+         <div class="text-4xl md:text-5xl font-bold mb-2">
+          15
+         </div>
+         <div class="text-sm md:text-base opacity-80">
+          Counties Active
+         </div>
+        </div>
+       </div>
+      </div>
+     </section>
+    </section><!-- ABOUT PAGE -->
+    <section id="page-about" class="page-section hidden"><!-- About Hero -->
+     <div class="relative py-20 md:py-32 bg-gradient-to-br from-[#1a5d3a] via-[#166534] to-[#0e7490]">
+      <div class="absolute inset-0 opacity-10">
+       <svg class="w-full h-full" viewbox="0 0 100 100" preserveaspectratio="none"><circle cx="80" cy="20" r="30" fill="white" /> <circle cx="20" cy="80" r="40" fill="white" />
+       </svg>
+      </div>
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+       <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-bold mb-6">About Eco-WASH Liberia</h1>
+       <p class="text-lg md:text-xl max-w-3xl mx-auto opacity-90">A national, non-profit organization dedicated to improving public health, environmental sustainability, and climate resilience across Liberia.</p>
+      </div>
+     </div><!-- Image Gallery Section -->
+     <section class="py-16 md:py-24 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+       <div class="text-center mb-12">
+        <h2 class="font-display text-3xl md:text-4xl font-bold text-gray-900 mb-4">Our Work in Action</h2>
+        <p class="text-lg text-gray-600">Upload images to showcase our impact</p>
+       </div>
+       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"><!-- Image Upload 1 -->
+        <div class="relative"><input type="file" id="image-upload-1" accept="image/*" class="hidden" onchange="handleImageUpload(1, this)"> <label for="image-upload-1" class="image-upload-zone block aspect-[4/3] rounded-2xl overflow-hidden" id="image-zone-1">
+          <div class="h-full flex flex-col items-center justify-center p-6 text-center" id="image-placeholder-1">
+           <svg class="w-12 h-12 text-gray-400 mb-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+           </svg><span class="text-sm font-medium text-gray-500">Click to upload</span> <span class="text-xs text-gray-400 mt-1">Community Projects</span>
+          </div><img id="image-preview-1" class="hidden w-full h-full object-cover" alt="Community Projects"> </label> <button onclick="removeImage(1)" id="remove-btn-1" class="hidden absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg></button>
+        </div><!-- Image Upload 2 -->
+        <div class="relative"><input type="file" id="image-upload-2" accept="image/*" class="hidden" onchange="handleImageUpload(2, this)"> <label for="image-upload-2" class="image-upload-zone block aspect-[4/3] rounded-2xl overflow-hidden" id="image-zone-2">
+          <div class="h-full flex flex-col items-center justify-center p-6 text-center" id="image-placeholder-2">
+           <svg class="w-12 h-12 text-gray-400 mb-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+           </svg><span class="text-sm font-medium text-gray-500">Click to upload</span> <span class="text-xs text-gray-400 mt-1">Water Systems</span>
+          </div><img id="image-preview-2" class="hidden w-full h-full object-cover" alt="Water Systems"> </label> <button onclick="removeImage(2)" id="remove-btn-2" class="hidden absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg></button>
+        </div><!-- Image Upload 3 -->
+        <div class="relative"><input type="file" id="image-upload-3" accept="image/*" class="hidden" onchange="handleImageUpload(3, this)"> <label for="image-upload-3" class="image-upload-zone block aspect-[4/3] rounded-2xl overflow-hidden" id="image-zone-3">
+          <div class="h-full flex flex-col items-center justify-center p-6 text-center" id="image-placeholder-3">
+           <svg class="w-12 h-12 text-gray-400 mb-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+           </svg><span class="text-sm font-medium text-gray-500">Click to upload</span> <span class="text-xs text-gray-400 mt-1">Environmental Work</span>
+          </div><img id="image-preview-3" class="hidden w-full h-full object-cover" alt="Environmental Work"> </label> <button onclick="removeImage(3)" id="remove-btn-3" class="hidden absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg></button>
+        </div><!-- Image Upload 4 -->
+        <div class="relative"><input type="file" id="image-upload-4" accept="image/*" class="hidden" onchange="handleImageUpload(4, this)"> <label for="image-upload-4" class="image-upload-zone block aspect-[4/3] rounded-2xl overflow-hidden" id="image-zone-4">
+          <div class="h-full flex flex-col items-center justify-center p-6 text-center" id="image-placeholder-4">
+           <svg class="w-12 h-12 text-gray-400 mb-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+           </svg><span class="text-sm font-medium text-gray-500">Click to upload</span> <span class="text-xs text-gray-400 mt-1">Team &amp; Partners</span>
+          </div><img id="image-preview-4" class="hidden w-full h-full object-cover" alt="Team &amp; Partners"> </label> <button onclick="removeImage(4)" id="remove-btn-4" class="hidden absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg></button>
+        </div>
+       </div>
+      </div>
+     </section><!-- Organizational Overview -->
+     <section class="py-16 md:py-24 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+       <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div>
+         <div class="inline-flex items-center gap-2 px-4 py-2 bg-[#1a5d3a]/10 rounded-full mb-6"><span class="w-2 h-2 bg-[#1a5d3a] rounded-full"></span> <span class="text-sm font-semibold text-[#1a5d3a]">Who We Are</span>
+         </div>
+         <h2 class="font-display text-3xl md:text-4xl font-bold text-gray-900 mb-6">Organizational Overview</h2>
+         <div class="space-y-4 text-gray-600 leading-relaxed">
+          <p>Eco-WASH Liberia (EWL) is a national, non-profit, community-driven organization dedicated to improving public health, environmental sustainability, and climate resilience across Liberia.</p>
+          <p>We work at the nexus of Water, Sanitation and Hygiene (WASH), environmental conservation, climate change adaptation, and community livelihoods, with a strong emphasis on protecting watersheds, forests, mangroves, rivers, and coastal ecosystems from degradation and pollution.</p>
+          <p>Through strong partnerships with government institutions, civil society, and local communities, EWL contributes to national development priorities, SDGs, NAPs, and international environmental commitments.</p>
+         </div>
+        </div>
+        <div class="relative">
+         <div class="bg-gradient-to-br from-[#1a5d3a] to-[#0e7490] rounded-3xl p-8 md:p-12">
+          <div class="grid grid-cols-2 gap-6">
+           <div class="bg-white/10 rounded-2xl p-6 text-center text-white">
+            <svg class="w-10 h-10 mx-auto mb-3" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
+            </svg>
+            <div class="font-bold text-lg">
+             WASH
+            </div>
+           </div>
+           <div class="bg-white/10 rounded-2xl p-6 text-center text-white">
+            <svg class="w-10 h-10 mx-auto mb-3" fill="currentColor" viewbox="0 0 24 24"><path d="M12 22c4.97 0 9-4.03 9-9-4.97 0-9 4.03-9 9zM5.6 10.25c0 1.38 1.12 2.5 2.5 2.5.53 0 1.01-.16 1.42-.44l-.02.19c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5l-.02-.19c.4.28.89.44 1.42.44 1.38 0 2.5-1.12 2.5-2.5 0-1-.59-1.85-1.43-2.25.84-.4 1.43-1.25 1.43-2.25 0-1.38-1.12-2.5-2.5-2.5-.53 0-1.01.16-1.42.44l.02-.19C14.5 3.62 13.38 2.5 12 2.5S9.5 3.62 9.5 5l.02.19c-.4-.28-.89-.44-1.42-.44-1.38 0-2.5 1.12-2.5 2.5 0 1 .59 1.85 1.43 2.25-.84.4-1.43 1.25-1.43 2.25zM3 13c0 4.97 4.03 9 9 9 0-4.97-4.03-9-9-9z" />
+            </svg>
+            <div class="font-bold text-lg">
+             Environment
+            </div>
+           </div>
+           <div class="bg-white/10 rounded-2xl p-6 text-center text-white">
+            <svg class="w-10 h-10 mx-auto mb-3" fill="currentColor" viewbox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z" />
+            </svg>
+            <div class="font-bold text-lg">
+             Climate
+            </div>
+           </div>
+           <div class="bg-white/10 rounded-2xl p-6 text-center text-white">
+            <svg class="w-10 h-10 mx-auto mb-3" fill="currentColor" viewbox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
+            </svg>
+            <div class="font-bold text-lg">
+             Community
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </section><!-- Strategic Objectives -->
+     <section class="py-16 md:py-24 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+       <div class="text-center mb-12 md:mb-16">
+        <h2 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Strategic Objectives</h2>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">Our roadmap for creating lasting change</p>
+       </div>
+       <div class="space-y-4" style="counter-reset: objective;">
+        <div class="objective-item flex items-start gap-4 md:gap-6 p-6 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-colors">
+         <p class="text-gray-700 flex-1">Expand equitable access to safe, affordable, and climate-resilient water supply systems in underserved communities.</p>
+        </div>
+        <div class="objective-item flex items-start gap-4 md:gap-6 p-6 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-colors">
+         <p class="text-gray-700 flex-1">Improve sanitation and hygiene outcomes using environmentally safe and culturally appropriate solutions that prevent water contamination.</p>
+        </div>
+        <div class="objective-item flex items-start gap-4 md:gap-6 p-6 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-colors">
+         <p class="text-gray-700 flex-1">Protect and restore watersheds, forests, mangroves, rivers, and coastal ecosystems critical to water security and livelihoods.</p>
+        </div>
+        <div class="objective-item flex items-start gap-4 md:gap-6 p-6 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-colors">
+         <p class="text-gray-700 flex-1">Reduce plastic and solid waste pollution through community-based systems, circular economy approaches, and behavior change.</p>
+        </div>
+        <div class="objective-item flex items-start gap-4 md:gap-6 p-6 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-colors">
+         <p class="text-gray-700 flex-1">Strengthen community and local governance systems for water, forest, mangrove, and waste management.</p>
+        </div>
+        <div class="objective-item flex items-start gap-4 md:gap-6 p-6 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-colors">
+         <p class="text-gray-700 flex-1">Promote climate-resilient and nature-positive livelihoods, particularly for women, youth, and forest-edge and coastal communities.</p>
+        </div>
+        <div class="objective-item flex items-start gap-4 md:gap-6 p-6 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-colors">
+         <p class="text-gray-700 flex-1">Enhance community awareness, advocacy, and policy engagement on WASH, environmental protection, and climate adaptation.</p>
+        </div>
+       </div>
+      </div>
+     </section>
+    </section><!-- PROGRAMS PAGE -->
+    <section id="page-programs" class="page-section hidden"><!-- Programs Hero -->
+     <div class="relative py-20 md:py-32 bg-gradient-to-br from-[#0e7490] via-[#0891b2] to-[#1a5d3a]">
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+       <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-bold mb-6">Thematic Program Areas</h1>
+       <p class="text-lg md:text-xl max-w-3xl mx-auto opacity-90">Integrated solutions for sustainable development</p>
+      </div>
+     </div><!-- WASH Programs -->
+     <section class="py-16 md:py-24 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+       <div class="grid lg:grid-cols-2 gap-12 items-center mb-20">
+        <div>
+         <div class="inline-flex items-center gap-2 px-4 py-2 bg-[#0e7490]/10 rounded-full mb-6">
+          <svg class="w-5 h-5 text-[#0e7490]" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2c-5.33 4.55-8 8.48-8 11.8 0 4.98 3.8 8.2 8 8.2s8-3.22 8-8.2c0-3.32-2.67-7.25-8-11.8z" />
+          </svg><span class="text-sm font-semibold text-[#0e7490]">Program Area A</span>
+         </div>
+         <h2 class="font-display text-3xl md:text-4xl font-bold text-gray-900 mb-6">Water, Sanitation &amp; Hygiene (WASH)</h2>
+         <ul class="space-y-3 text-gray-600">
+          <li class="flex items-start gap-3">
+           <svg class="w-5 h-5 text-[#22c55e] mt-1 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+           </svg><span>Borehole drilling, rehabilitation, and solarized water systems</span></li>
+          <li class="flex items-start gap-3">
+           <svg class="w-5 h-5 text-[#22c55e] mt-1 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+           </svg><span>Spring protection and gravity-fed water schemes</span></li>
+          <li class="flex items-start gap-3">
+           <svg class="w-5 h-5 text-[#22c55e] mt-1 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+           </svg><span>Climate-resilient, gender-responsive, and disability-inclusive sanitation facilities</span></li>
+          <li class="flex items-start gap-3">
+           <svg class="w-5 h-5 text-[#22c55e] mt-1 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+           </svg><span>School, health facility, and institutional WASH programs</span></li>
+          <li class="flex items-start gap-3">
+           <svg class="w-5 h-5 text-[#22c55e] mt-1 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+           </svg><span>Hygiene promotion, menstrual hygiene management (MHM), and behavior change communication</span></li>
+         </ul>
+        </div>
+        <div class="bg-gradient-to-br from-[#0e7490]/10 to-[#22c55e]/10 rounded-3xl p-8 md:p-12">
+         <div class="bg-white rounded-2xl p-8 shadow-lg">
+          <svg class="w-20 h-20 mx-auto text-[#0e7490] mb-6" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2c-5.33 4.55-8 8.48-8 11.8 0 4.98 3.8 8.2 8 8.2s8-3.22 8-8.2c0-3.32-2.67-7.25-8-11.8zm0 18c-3.35 0-6-2.57-6-6.2 0-2.34 1.95-5.44 6-9.14 4.05 3.7 6 6.79 6 9.14 0 3.63-2.65 6.2-6 6.2z" />
+          </svg>
+          <h3 class="text-center font-display text-xl font-bold text-gray-900">Clean Water Access</h3>
+         </div>
+        </div>
+       </div><!-- Environment Programs -->
+       <div class="grid lg:grid-cols-2 gap-12 items-center mb-20">
+        <div class="order-2 lg:order-1 bg-gradient-to-br from-[#1a5d3a]/10 to-[#22c55e]/10 rounded-3xl p-8 md:p-12">
+         <div class="bg-white rounded-2xl p-8 shadow-lg">
+          <svg class="w-20 h-20 mx-auto text-[#1a5d3a] mb-6" fill="currentColor" viewbox="0 0 24 24"><path d="M12 22c4.97 0 9-4.03 9-9-4.97 0-9 4.03-9 9zM5.6 10.25c0 1.38 1.12 2.5 2.5 2.5.53 0 1.01-.16 1.42-.44l-.02.19c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5l-.02-.19c.4.28.89.44 1.42.44 1.38 0 2.5-1.12 2.5-2.5 0-1-.59-1.85-1.43-2.25.84-.4 1.43-1.25 1.43-2.25 0-1.38-1.12-2.5-2.5-2.5-.53 0-1.01.16-1.42.44l.02-.19C14.5 3.62 13.38 2.5 12 2.5S9.5 3.62 9.5 5l.02.19c-.4-.28-.89-.44-1.42-.44-1.38 0-2.5 1.12-2.5 2.5 0 1 .59 1.85 1.43 2.25-.84.4-1.43 1.25-1.43 2.25zM12 5.5c1.38 0 2.5 1.12 2.5 2.5s-1.12 2.5-2.5 2.5S9.5 9.38 9.5 8s1.12-2.5 2.5-2.5zM3 13c0 4.97 4.03 9 9 9 0-4.97-4.03-9-9-9z" />
+          </svg>
+          <h3 class="text-center font-display text-xl font-bold text-gray-900">Ecosystem Protection</h3>
+         </div>
+        </div>
+        <div class="order-1 lg:order-2">
+         <div class="inline-flex items-center gap-2 px-4 py-2 bg-[#1a5d3a]/10 rounded-full mb-6">
+          <svg class="w-5 h-5 text-[#1a5d3a]" fill="currentColor" viewbox="0 0 24 24"><path d="M12 22c4.97 0 9-4.03 9-9-4.97 0-9 4.03-9 9z" />
+          </svg><span class="text-sm font-semibold text-[#1a5d3a]">Program Area B</span>
+         </div>
+         <h2 class="font-display text-3xl md:text-4xl font-bold text-gray-900 mb-6">Environment, Forests, Mangroves &amp; Blue Economy</h2>
+         <ul class="space-y-3 text-gray-600">
+          <li class="flex items-start gap-3">
+           <svg class="w-5 h-5 text-[#22c55e] mt-1 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+           </svg><span>Community-based forest, mangrove, and coastal ecosystem co-management</span></li>
+          <li class="flex items-start gap-3">
+           <svg class="w-5 h-5 text-[#22c55e] mt-1 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+           </svg><span>Mangrove and blue-carbon ecosystem restoration in coastal and riverine areas</span></li>
+          <li class="flex items-start gap-3">
+           <svg class="w-5 h-5 text-[#22c55e] mt-1 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+           </svg><span>Watershed, river, and water-source protection</span></li>
+          <li class="flex items-start gap-3">
+           <svg class="w-5 h-5 text-[#22c55e] mt-1 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+           </svg><span>Biodiversity conservation and sustainable fisheries support</span></li>
+          <li class="flex items-start gap-3">
+           <svg class="w-5 h-5 text-[#22c55e] mt-1 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+           </svg><span>Nature-based climate mitigation and ecosystem-based adaptation</span></li>
+          <li class="flex items-start gap-3">
+           <svg class="w-5 h-5 text-[#22c55e] mt-1 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+           </svg><span>Promotion of sustainable blue-economy practices that support livelihoods and water security</span></li>
+         </ul>
+        </div>
+       </div><!-- Waste Management -->
+       <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+         <div class="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/10 rounded-full mb-6">
+          <svg class="w-5 h-5 text-amber-600" fill="currentColor" viewbox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12z" />
+          </svg><span class="text-sm font-semibold text-amber-600">Program Area C</span>
+         </div>
+         <h2 class="font-display text-3xl md:text-4xl font-bold text-gray-900 mb-6">Plastic, Solid Waste &amp; Pollution Control</h2>
+         <ul class="space-y-3 text-gray-600">
+          <li class="flex items-start gap-3">
+           <svg class="w-5 h-5 text-[#22c55e] mt-1 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+           </svg><span>Community-based plastic and solid waste collection and segregation</span></li>
+          <li class="flex items-start gap-3">
+           <svg class="w-5 h-5 text-[#22c55e] mt-1 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+           </svg><span>River, wetland, forest, and coastal clean-up campaigns</span></li>
+          <li class="flex items-start gap-3">
+           <svg class="w-5 h-5 text-[#22c55e] mt-1 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+           </svg><span>Circular economy approaches and recycling initiatives</span></li>
+          <li class="flex items-start gap-3">
+           <svg class="w-5 h-5 text-[#22c55e] mt-1 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+           </svg><span>Behavior change campaigns for waste reduction</span></li>
+         </ul>
+        </div>
+        <div class="bg-gradient-to-br from-amber-500/10 to-orange-500/10 rounded-3xl p-8 md:p-12">
+         <div class="bg-white rounded-2xl p-8 shadow-lg">
+          <svg class="w-20 h-20 mx-auto text-amber-600 mb-6" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+          </svg>
+          <h3 class="text-center font-display text-xl font-bold text-gray-900">Waste Management</h3>
+         </div>
+        </div>
+       </div>
+      </div>
+     </section>
+    </section><!-- CONTACT PAGE -->
+    <section id="page-contact" class="page-section hidden"><!-- Contact Hero -->
+     <div class="relative py-20 md:py-32 bg-gradient-to-br from-[#1a5d3a] to-[#0e7490]">
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+       <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-bold mb-6">Get In Touch</h1>
+       <p class="text-lg md:text-xl max-w-3xl mx-auto opacity-90">Partner with us to create sustainable change</p>
+      </div>
+     </div><!-- Contact Form -->
+     <section class="py-16 md:py-24 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+       <div class="grid lg:grid-cols-2 gap-12 lg:gap-16">
+        <div>
+         <h2 class="font-display text-3xl md:text-4xl font-bold text-gray-900 mb-6">Let's Work Together</h2>
+         <p class="text-lg text-gray-600 mb-8">Whether you're looking to partner, donate, or learn more about our work, we'd love to hear from you.</p>
+         <div class="space-y-6">
+          <div class="flex items-start gap-4">
+           <div class="w-12 h-12 bg-[#1a5d3a]/10 rounded-xl flex items-center justify-center flex-shrink-0">
+            <svg class="w-6 h-6 text-[#1a5d3a]" fill="currentColor" viewbox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+            </svg>
+           </div>
+           <div>
+            <h4 class="font-semibold text-gray-900">Email</h4>
+            <p id="contact-email" class="text-gray-600">info@ecowashliberia.org</p>
+           </div>
+          </div>
+          <div class="flex items-start gap-4">
+           <div class="w-12 h-12 bg-[#1a5d3a]/10 rounded-xl flex items-center justify-center flex-shrink-0">
+            <svg class="w-6 h-6 text-[#1a5d3a]" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+            </svg>
+           </div>
+           <div>
+            <h4 class="font-semibold text-gray-900">Location</h4>
+            <p class="text-gray-600">Monrovia, Liberia</p>
+           </div>
+          </div>
+         </div>
+        </div>
+        <div class="bg-gray-50 rounded-3xl p-8 md:p-10">
+         <form id="contact-form" onsubmit="handleContactSubmit(event)">
+          <div class="space-y-6">
+           <div><label for="name" class="block text-sm font-semibold text-gray-700 mb-2">Full Name</label> <input type="text" id="name" name="name" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#1a5d3a] focus:ring-2 focus:ring-[#1a5d3a]/20 outline-none transition-colors" placeholder="Your full name">
+           </div>
+           <div><label for="email" class="block text-sm font-semibold text-gray-700 mb-2">Email Address</label> <input type="email" id="email" name="email" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#1a5d3a] focus:ring-2 focus:ring-[#1a5d3a]/20 outline-none transition-colors" placeholder="your@email.com">
+           </div>
+           <div><label for="subject" class="block text-sm font-semibold text-gray-700 mb-2">Subject</label> <select id="subject" name="subject" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#1a5d3a] focus:ring-2 focus:ring-[#1a5d3a]/20 outline-none transition-colors"> <option value="">Select a subject</option> <option value="partnership">Partnership Inquiry</option> <option value="donation">Donation</option> <option value="volunteer">Volunteer</option> <option value="general">General Inquiry</option> </select>
+           </div>
+           <div><label for="message" class="block text-sm font-semibold text-gray-700 mb-2">Message</label> <textarea id="message" name="message" rows="4" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#1a5d3a] focus:ring-2 focus:ring-[#1a5d3a]/20 outline-none transition-colors resize-none" placeholder="Tell us how we can help..."></textarea>
+           </div><button type="submit" class="w-full px-6 py-4 bg-[#1a5d3a] text-white rounded-xl font-bold hover:bg-[#0e7490] transition-colors"> Send Message </button>
+          </div>
+         </form>
+         <div id="form-success" class="hidden text-center py-8">
+          <div class="w-16 h-16 bg-[#22c55e]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+           <svg class="w-8 h-8 text-[#22c55e]" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+           </svg>
+          </div>
+          <h3 class="font-display text-xl font-bold text-gray-900 mb-2">Message Sent!</h3>
+          <p class="text-gray-600">Thank you for reaching out. We'll get back to you soon.</p>
+         </div>
+        </div>
+       </div>
+      </div>
+     </section>
+    </section>
+   </main><!-- Footer -->
+   <footer class="bg-gray-900 text-white py-12 md:py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-12">
+      <div>
+       <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#1a5d3a] to-[#0e7490] flex items-center justify-center">
+         <svg class="w-6 h-6 text-white" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
+         </svg>
+        </div><span id="footer-title" class="font-display text-lg font-bold">Eco-WASH Liberia</span>
+       </div>
+       <p class="text-gray-400 text-sm">Empowering communities through sustainable WASH services and ecosystem protection.</p>
+      </div>
+      <div>
+       <h4 class="font-semibold mb-4">Quick Links</h4>
+       <ul class="space-y-2 text-sm text-gray-400">
+        <li><button onclick="navigateTo('home')" class="hover:text-white transition-colors">Home</button></li>
+        <li><button onclick="navigateTo('about')" class="hover:text-white transition-colors">About Us</button></li>
+        <li><button onclick="navigateTo('programs')" class="hover:text-white transition-colors">Programs</button></li>
+        <li><button onclick="navigateTo('contact')" class="hover:text-white transition-colors">Contact</button></li>
+       </ul>
+      </div>
+      <div>
+       <h4 class="font-semibold mb-4">Programs</h4>
+       <ul class="space-y-2 text-sm text-gray-400">
+        <li>WASH Services</li>
+        <li>Environment</li>
+        <li>Blue Economy</li>
+        <li>Waste Management</li>
+       </ul>
+      </div>
+      <div>
+       <h4 class="font-semibold mb-4">Connect</h4>
+       <div class="flex gap-4"><a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors">
+         <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+         </svg></a> <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors">
+         <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
+         </svg></a> <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors">
+         <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+         </svg></a>
+       </div>
+      </div>
+     </div>
+     <div class="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
+      <p>© 2024 Eco-WASH Liberia. All rights reserved.</p>
+     </div>
+    </div>
+   </footer>
+  </div>
+  <script>
+    // Default Configuration
+    const defaultConfig = {
+      org_name: 'Eco-WASH Liberia',
+      hero_tagline: 'Empowering Liberia through sustainable WASH services and ecosystem protection',
+      contact_email: 'info@ecowashliberia.org',
+      background_color: '#f8fafc',
+      surface_color: '#ffffff',
+      text_color: '#1f2937',
+      primary_action_color: '#1a5d3a',
+      secondary_action_color: '#0e7490',
+      font_family: 'Source Sans 3',
+      font_size: 16
+    };
+    
+    // Banner Slider
+    let currentSlide = 0;
+    let slideInterval;
+    
+    function goToSlide(index) {
+      const slides = document.querySelectorAll('.banner-slide');
+      const dots = document.querySelectorAll('.banner-dots button');
+      
+      slides.forEach(slide => slide.classList.remove('active'));
+      dots.forEach(dot => dot.classList.remove('active'));
+      
+      slides[index].classList.add('active');
+      dots[index].classList.add('active');
+      currentSlide = index;
+    }
+    
+    function nextSlide() {
+      const totalSlides = document.querySelectorAll('.banner-slide').length;
+      goToSlide((currentSlide + 1) % totalSlides);
+    }
+    
+    function prevSlide() {
+      const totalSlides = document.querySelectorAll('.banner-slide').length;
+      goToSlide((currentSlide - 1 + totalSlides) % totalSlides);
+    }
+    
+    function startSlideshow() {
+      slideInterval = setInterval(nextSlide, 5000);
+    }
+    
+    function stopSlideshow() {
+      clearInterval(slideInterval);
+    }
+    
+    // Navigation
+    function navigateTo(page) {
+      const sections = document.querySelectorAll('.page-section');
+      const navLinks = document.querySelectorAll('.nav-link');
+      
+      sections.forEach(section => section.classList.add('hidden'));
+      navLinks.forEach(link => link.classList.remove('active'));
+      
+      document.getElementById(`page-${page}`).classList.remove('hidden');
+      document.querySelector(`[data-page="${page}"]`)?.classList.add('active');
+      
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
+    // Mobile Menu
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      const menuIcon = document.getElementById('menu-icon');
+      const closeIcon = document.getElementById('close-icon');
+      
+      menu.classList.toggle('open');
+      menuIcon.classList.toggle('hidden');
+      closeIcon.classList.toggle('hidden');
+    }
+    
+    // Image Upload Handling
+    function handleImageUpload(index, input) {
+      const file = input.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const preview = document.getElementById(`image-preview-${index}`);
+          const placeholder = document.getElementById(`image-placeholder-${index}`);
+          const zone = document.getElementById(`image-zone-${index}`);
+          const removeBtn = document.getElementById(`remove-btn-${index}`);
+          
+          preview.src = e.target.result;
+          preview.classList.remove('hidden');
+          placeholder.classList.add('hidden');
+          zone.classList.add('has-image');
+          removeBtn.classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+    
+    function removeImage(index) {
+      const preview = document.getElementById(`image-preview-${index}`);
+      const placeholder = document.getElementById(`image-placeholder-${index}`);
+      const zone = document.getElementById(`image-zone-${index}`);
+      const removeBtn = document.getElementById(`remove-btn-${index}`);
+      const input = document.getElementById(`image-upload-${index}`);
+      
+      preview.src = '';
+      preview.classList.add('hidden');
+      placeholder.classList.remove('hidden');
+      zone.classList.remove('has-image');
+      removeBtn.classList.add('hidden');
+      input.value = '';
+    }
+    
+    // Contact Form
+    function handleContactSubmit(e) {
+      e.preventDefault();
+      const form = document.getElementById('contact-form');
+      const success = document.getElementById('form-success');
+      
+      form.classList.add('hidden');
+      success.classList.remove('hidden');
+      
+      setTimeout(() => {
+        form.reset();
+        form.classList.remove('hidden');
+        success.classList.add('hidden');
+      }, 3000);
+    }
+    
+    // Element SDK Integration
+    async function onConfigChange(config) {
+      const orgName = config.org_name || defaultConfig.org_name;
+      const heroTagline = config.hero_tagline || defaultConfig.hero_tagline;
+      const contactEmail = config.contact_email || defaultConfig.contact_email;
+      const bgColor = config.background_color || defaultConfig.background_color;
+      const primaryColor = config.primary_action_color || defaultConfig.primary_action_color;
+      const secondaryColor = config.secondary_action_color || defaultConfig.secondary_action_color;
+      const fontFamily = config.font_family || defaultConfig.font_family;
+      const fontSize = config.font_size || defaultConfig.font_size;
+      
+      // Update text content
+      const navTitle = document.getElementById('nav-title');
+      if (navTitle) navTitle.textContent = orgName;
+      
+      const footerTitle = document.getElementById('footer-title');
+      if (footerTitle) footerTitle.textContent = orgName;
+      
+      const heroTaglineEl = document.getElementById('hero-tagline');
+      if (heroTaglineEl) heroTaglineEl.textContent = heroTagline;
+      
+      const contactEmailEl = document.getElementById('contact-email');
+      if (contactEmailEl) contactEmailEl.textContent = contactEmail;
+      
+      // Update colors
+      document.documentElement.style.setProperty('--color-forest', primaryColor);
+      document.documentElement.style.setProperty('--color-ocean', secondaryColor);
+      
+      // Update fonts
+      document.body.style.fontFamily = `${fontFamily}, sans-serif`;
+      document.body.style.fontSize = `${fontSize}px`;
+    }
+    
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.background_color || defaultConfig.background_color,
+            set: (value) => {
+              config.background_color = value;
+              if (window.elementSdk) window.elementSdk.setConfig({ background_color: value });
+            }
+          },
+          {
+            get: () => config.surface_color || defaultConfig.surface_color,
+            set: (value) => {
+              config.surface_color = value;
+              if (window.elementSdk) window.elementSdk.setConfig({ surface_color: value });
+            }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => {
+              config.text_color = value;
+              if (window.elementSdk) window.elementSdk.setConfig({ text_color: value });
+            }
+          },
+          {
+            get: () => config.primary_action_color || defaultConfig.primary_action_color,
+            set: (value) => {
+              config.primary_action_color = value;
+              if (window.elementSdk) window.elementSdk.setConfig({ primary_action_color: value });
+            }
+          },
+          {
+            get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+            set: (value) => {
+              config.secondary_action_color = value;
+              if (window.elementSdk) window.elementSdk.setConfig({ secondary_action_color: value });
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: {
+          get: () => config.font_family || defaultConfig.font_family,
+          set: (value) => {
+            config.font_family = value;
+            if (window.elementSdk) window.elementSdk.setConfig({ font_family: value });
+          }
+        },
+        fontSizeable: {
+          get: () => config.font_size || defaultConfig.font_size,
+          set: (value) => {
+            config.font_size = value;
+            if (window.elementSdk) window.elementSdk.setConfig({ font_size: value });
+          }
+        }
+      };
+    }
+    
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ['org_name', config.org_name || defaultConfig.org_name],
+        ['hero_tagline', config.hero_tagline || defaultConfig.hero_tagline],
+        ['contact_email', config.contact_email || defaultConfig.contact_email]
+      ]);
+    }
+    
+    // Initialize
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+    
+    startSlideshow();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d22e1b841efb7b7',t:'MTc3MTgwOTQyNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
